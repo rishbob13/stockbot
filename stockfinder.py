@@ -27,7 +27,7 @@ def RSI_short_term(ticker, secs):
         prev = p
         time.sleep(0.8)
 
-    rs = (np.sum(gain)/len(arr))/(np.sum(loss)/len(arr))
+    rs = (np.sum(gain)/len(arr))**2.5/(np.sum(loss)/len(arr))**2.5
     rsi = 100 - 100/(1 + rs)
 
     #return rs, rsi, arr[0], arr[len(arr) - 1], len(arr), gain, loss
@@ -57,7 +57,7 @@ def RSI_long_term(ticker, days):
 
     return rsi
 
-def EMA_shor_term(ticker, secs):
+def EMA_short_term(ticker, secs):
     """
     RSI calculator for short term (intraday)
     """
@@ -75,9 +75,9 @@ def EMA_shor_term(ticker, secs):
     m = (s/(1 + d))
 
     EMAo = np.mean(arr)
-    EMAn = (V * m) + EMAy * (1 - m)
+    EMAn = (V * m) + EMAo * (1 - m)
 
-    return EMAt
+    return EMAn
 
 
 def EMA_long_term(ticker, days):
@@ -97,3 +97,34 @@ def EMA_long_term(ticker, days):
     EMAt = (V * m) + EMAy * (1 - m)
 
     return EMAt
+
+
+def stockbot(ticker, secs):
+    netl = 250
+    cash = 250
+    amount = 0
+    buy_p = 0
+    t_end = time.time() + (secs + 1)
+
+    while (time.time() < t_end):
+        while amount == 0:
+            if RSI_short_term(ticker, 30) < 40:
+                p = get_live_price(ticker)
+                buy_p = p
+                cash = cash - p
+                amount += 1
+                t = time.localtime()
+                current_time = time.strftime("%H:%M:%S", t)
+                print('BUY, {}, {}, {}, {}'.format(p, netl, current_time, cash))
+
+        while amount > 0:
+            if RSI_short_term(ticker, 30) > 60:
+                p = get_live_price(ticker)
+                cash = cash + p
+                netl = netl + (p - buy_p)
+                amount -= 1
+                t = time.localtime()
+                current_time = time.strftime("%H:%M:%S", t)
+                print('SELL, {}, {}, {}, {}'.format(p, netl, current_time, cash))
+
+    return netl
