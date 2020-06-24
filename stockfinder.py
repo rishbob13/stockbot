@@ -30,7 +30,8 @@ def RSI_short_term(ticker, secs):
     rs = (np.sum(gain)/len(arr))/(np.sum(loss)/len(arr))
     rsi = 100 - 100/(1 + rs)
 
-    return rs, rsi, arr[0], arr[len(arr) - 1], len(arr), gain, loss
+    #return rs, rsi, arr[0], arr[len(arr) - 1], len(arr), gain, loss
+    return rsi
 
 
 
@@ -56,6 +57,27 @@ def RSI_long_term(ticker, days):
 
     return rsi
 
+def EMA_shor_term(ticker, secs):
+    """
+    RSI calculator for short term (intraday)
+    """
+    arr = []
+    t_end = time.time() + (secs + 1)
+
+    while (time.time() < t_end):
+        p = get_live_price(ticker)
+        arr.append(p)
+        time.sleep(1)
+
+    V = get_live_price(ticker)
+    s = 2
+    d = secs
+    m = (s/(1 + d))
+
+    EMAo = np.mean(arr)
+    EMAn = (V * m) + EMAy * (1 - m)
+
+    return EMAt
 
 
 def EMA_long_term(ticker, days):
@@ -65,6 +87,7 @@ def EMA_long_term(ticker, days):
     tick = yf.Ticker(ticker)
     hist = tick.history(period = "{}d".format(days - 1))
     closes = hist['Close']
+
     V = get_live_price(ticker)
     s = 2
     d = days
