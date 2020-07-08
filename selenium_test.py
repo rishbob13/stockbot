@@ -28,7 +28,7 @@ def marketwatch_game(stock):
     time.sleep(2)
 
     user.send_keys("rishabhv@hotmail.com")
-    passw.send_keys("***********")
+    passw.send_keys("Sandbox0!23")
     passw.send_keys(Keys.ENTER)
     time.sleep(2)
 
