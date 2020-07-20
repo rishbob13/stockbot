@@ -29,7 +29,7 @@ def RSI_short_term(ticker, secs):
             elif p < prev:
                 loss.append(prev - p)
         prev = p
-        time.sleep(0.8)
+        time.sleep(1)
 
     rs = (np.sum(gain)/len(arr))**2.5/(np.sum(loss)/len(arr))**2.5
     #seems to be well calibrated for periods of 60 secs, all over the place
