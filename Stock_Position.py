@@ -91,6 +91,6 @@ class Stock_Position:
         #    self.value = self.cash
 
         p = get_live_price(self.ticker)
-        self.value = self.cash + self.amount * p
+        self.value = self.cash + (self.amount * p)
 
         return self.value, self.amount
