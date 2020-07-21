@@ -33,14 +33,7 @@ class Portfolio:
 
 
     def check_positions(self):
-        s = ""
-        self.netl_ref()
-
-        for t in self.tickers:
-            s = s + str(t) + "\n"
-
-        s = s + "Net Worth: {}".format(self.netl)
-        return print(s)
+        return print(str(self))
 
 
     def simul_run(self):
@@ -49,9 +42,12 @@ class Portfolio:
         for i in range(len(self.tickers)):
             process = Thread(
                 target = Stock_Position.trading_algo,
-                args = [self.tickers[i], 1800, 60],
+                args = [self.tickers[i], 3600, 60],
                 daemon = True)
             process.start()
             threads.append(process)
+
+        for p in threads:
+            p.join()
 
         return self.check_positions()

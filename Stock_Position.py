@@ -9,9 +9,10 @@ class Stock_Position:
 
     def __init__(self, ticker, value):
         self.ticker = ticker
-        self.cash = value
+        p = get_live_price(self.ticker)
         self.value = value
-        self.amount = 0
+        self.amount = (self.value//p)//2
+        self.cash = self.value - (self.amount * p)
 
 
     def __repr__(self):
@@ -26,7 +27,7 @@ class Stock_Position:
         Trading algorithm based on Algo3
         """
         #The number of seconds after the beginning that the progrom should run
-        print("Trading: {} for {} seconds".format(self.ticker, secs))
+        print("Trading: [" + str(self) + "] for {} seconds".format(secs))
 
         t_end = time.time() + secs
 
