@@ -35,10 +35,12 @@ class Stock_Position:
 
             RSI = RSI_short_term(self.ticker, rsi_per)
             p = get_live_price(self.ticker)
-            b_amount = ((50 - RSI)//10)
-            s_amount = ((RSI - 50)//10)
+            mult = (self.value//16)//p
+            if mult < 1: mult = 1
+            b_amount = ((50 - RSI)//10) * mult
+            s_amount = ((RSI - 50)//10) * mult
 
-            if (b_amount == 0 and s_amount == 0):
+            if (b_amount == 0 or s_amount == 0):
                 continue
 
             if RSI <= 50 and self.cash - (p * b_amount) >= 0:

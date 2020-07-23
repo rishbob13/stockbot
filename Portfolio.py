@@ -36,13 +36,13 @@ class Portfolio:
         return print(str(self))
 
 
-    def simul_run(self):
+    def simul_run(self, secs, RSI_per):
         threads = []
 
         for i in range(len(self.tickers)):
             process = Thread(
                 target = Stock_Position.trading_algo,
-                args = [self.tickers[i], 3600, 60],
+                args = [self.tickers[i], secs, RSI_per],
                 daemon = True)
             process.start()
             threads.append(process)
