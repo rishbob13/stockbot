@@ -9,9 +9,12 @@ class Portfolio:
     """
 
 
-    def __init__(self, tickers, netl):
+    def __init__(self, tickers, netl, RS):
         num = len(tickers)
-        self.tickers = [Stock_Position(t, netl//num) for t in tickers]
+        if RS == True:
+            self.positions = [RS_Position(t, netl//num) for t in tickers]
+        else:
+            self.positions = [Stock_Position(t, netl//num) for t in tickers]
         self.netl = netl
 
 
@@ -19,7 +22,7 @@ class Portfolio:
         s = ""
         self.netl_ref()
 
-        for t in self.tickers:
+        for t in self.positions:
             s = s + str(t) + "\n"
 
         s = s + "Net Worth: {}".format(self.netl)
@@ -27,7 +30,7 @@ class Portfolio:
 
 
     def netl_ref(self):
-        self.netl = np.sum([t.value for t in self.tickers])
+        self.netl = np.sum([t.value for t in self.positions])
 
         return self.netl
 
@@ -39,15 +42,19 @@ class Portfolio:
     def simul_run(self, secs, RSI_per):
         threads = []
 
-        for i in range(len(self.tickers)):
+        for i in range(len(self.positions)):
             process = Thread(
                 target = Stock_Position.trading_algo,
-                args = [self.tickers[i], secs, RSI_per],
+                args = [self.positions[i], secs, RSI_per],
                 daemon = True)
             process.start()
             threads.append(process)
 
         for p in threads:
             p.join()
+
+        if RS == True:
+            for t in self.positions:
+                t.close_position()
 
         return self.check_positions()

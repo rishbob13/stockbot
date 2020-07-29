@@ -1,10 +1,11 @@
 from stockfunctions import *
+import robin_stocks as rs
 
 
 
-class Stock_Position:
+class RS_Position:
     """
-    Class that manages and artificially trades a single stock
+    Class that manages and trades a single stock on RobinHood
     """
 
     def __init__(self, ticker, value):
@@ -12,6 +13,13 @@ class Stock_Position:
         p = get_live_price(self.ticker)
         self.value = value
         self.amount = (self.value//p)//2
+
+        rs.orders.order_buy_limit(
+            self.ticker,
+            self.amount,
+            p,
+            timeInForce = 'ioc')
+
         self.cash = self.value - (self.amount * p)
 
 
@@ -44,6 +52,12 @@ class Stock_Position:
                 continue
 
             if RSI <= 50 and self.cash - (p * b_amount) >= 0:
+                rs.orders.order_buy_limit(
+                    self.ticker,
+                    b_amount,
+                    p,
+                    timeInForce = 'ioc')
+
                 self.cash = self.cash - (p * b_amount)
                 self.amount = self.amount + b_amount
                 self.value = self.cash + (p * self.amount)
@@ -61,6 +75,12 @@ class Stock_Position:
                 continue
 
             elif RSI > 50 and self.amount> 0:
+                rs.orders.order_sell_limit(
+                    self.ticker,
+                    s_amount,
+                    p,
+                    timeInForce = 'ioc')
+
                 if s_amount > self.amount:
                     self.cash = self.cash + (p * self.amount)
                     self.amount = 0
@@ -97,3 +117,17 @@ class Stock_Position:
         self.value = self.cash + (self.amount * p)
 
         return
+
+
+    def close_position(self):
+        p = get_live_price(self.ticker)
+
+        rs.orders.order_sell_limit(
+            self.ticker,
+            s_amount,
+            p,
+            timeInForce = 'gtc')
+
+        self.value = self.cash + (self.amount * p)
+        self.cash = self.value
+        self.amount = 0
