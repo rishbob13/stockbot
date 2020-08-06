@@ -33,8 +33,13 @@ class Stock_Position:
 
         while (time.time() < t_end):
 
-            RSI = RSI_short_term(self.ticker, rsi_per)
-            p = get_live_price(self.ticker)
+            try:
+                RSI = RSI_short_term(self.ticker, rsi_per)
+                p = get_live_price(self.ticker)
+            except AssertionError:
+                print("Assertion error handled")
+                continue
+
             mult = (self.value//16)//p
             if mult < 1: mult = 1
             b_amount = ((50 - RSI)//10) * mult

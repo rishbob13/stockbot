@@ -3,11 +3,11 @@ from multiprocessing import Process, Pool
 from threading import Thread
 
 
+
 class Portfolio:
     """
     Class that manages multiple instances of the Stock_Positions object at once
     """
-
 
     def __init__(self, tickers, netl, RS):
         num = len(tickers)

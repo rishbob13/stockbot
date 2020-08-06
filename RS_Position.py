@@ -18,7 +18,7 @@ class RS_Position:
             self.ticker,
             self.amount,
             p,
-            timeInForce = 'ioc')
+            timeInForce = 'gtc')
 
         self.cash = self.value - (self.amount * p)
 
@@ -54,7 +54,7 @@ class RS_Position:
             if RSI <= 50 and self.cash - (p * b_amount) >= 0:
                 rs.orders.order_buy_limit(
                     self.ticker,
-                    b_amount,
+                    int(b_amount),
                     p,
                     timeInForce = 'ioc')
 
@@ -77,7 +77,7 @@ class RS_Position:
             elif RSI > 50 and self.amount> 0:
                 rs.orders.order_sell_limit(
                     self.ticker,
-                    s_amount,
+                    int(s_amount),
                     p,
                     timeInForce = 'ioc')
 
