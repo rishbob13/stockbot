@@ -37,7 +37,8 @@ class Stock_Position:
                 RSI = RSI_short_term(self.ticker, rsi_per)
                 p = get_live_price(self.ticker)
             except AssertionError:
-                print("Assertion error handled")
+                print("Assertion error handled for stock: " + self.ticker)
+                time.sleep(rsi_per)
                 continue
 
             mult = (self.value//16)//p

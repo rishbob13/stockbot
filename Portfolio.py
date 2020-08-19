@@ -16,6 +16,7 @@ class Portfolio:
         else:
             self.positions = [Stock_Position(t, netl//num) for t in tickers]
         self.netl = netl
+        self.RS = True
 
 
     def __repr__(self):
@@ -53,7 +54,7 @@ class Portfolio:
         for p in threads:
             p.join()
 
-        if RS == True:
+        if self.RS == True:
             for t in self.positions:
                 t.close_position()
 
