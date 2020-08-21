@@ -36,8 +36,12 @@ class Stock_Position:
             try:
                 RSI = RSI_short_term(self.ticker, rsi_per)
                 p = get_live_price(self.ticker)
-            except AssertionError:
+            except (AssertionError):
                 print("Assertion error handled for stock: " + self.ticker)
+                time.sleep(rsi_per)
+                continue
+            except (JSONDecodeError):
+                print("JSONException error for stock: " + self.ticker)
                 time.sleep(rsi_per)
                 continue
 

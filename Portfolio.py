@@ -16,7 +16,7 @@ class Portfolio:
         else:
             self.positions = [Stock_Position(t, netl//num) for t in tickers]
         self.netl = netl
-        self.RS = True
+        self.RS = RS
 
 
     def __repr__(self):
