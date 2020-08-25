@@ -40,10 +40,6 @@ class Stock_Position:
                 print("Assertion error handled for stock: " + self.ticker)
                 time.sleep(rsi_per)
                 continue
-            except (JSONDecodeError):
-                print("JSONException error for stock: " + self.ticker)
-                time.sleep(rsi_per)
-                continue
 
             mult = (self.value//16)//p
             if mult < 1: mult = 1

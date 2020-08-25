@@ -54,8 +54,8 @@ class Portfolio:
         for p in threads:
             p.join()
 
-        if self.RS == True:
-            for t in self.positions:
-                t.close_position()
+        #if self.RS == True:
+        #    for t in self.positions:
+        #        t.close_position()
 
         return self.check_positions()
