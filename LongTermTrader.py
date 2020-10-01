@@ -1,11 +1,8 @@
 from stockfunctions import *
+import robin_stocks as rs
 
 
-
-class Stock_Position:
-    """
-    Class that manages and artificially trades a single stock
-    """
+class RS_Position_Longterm:
 
     def __init__(self, ticker, value):
         self.ticker = ticker
@@ -33,14 +30,8 @@ class Stock_Position:
 
         while (time.time() < t_end):
 
-            try:
-                RSI = RSI_short_term(self.ticker, rsi_per, 2.5, 1)
-                p = get_live_price(self.ticker)
-            except (AssertionError):
-                print("Assertion error handled for stock: " + self.ticker)
-                time.sleep(rsi_per)
-                continue
-
+            RSI = RSI_short_term(self.ticker, rsi_per)
+            p = get_live_price(self.ticker)
             mult = (self.value//16)//p
             if mult < 1: mult = 1
             b_amount = ((50 - RSI)//10) * mult
@@ -50,6 +41,12 @@ class Stock_Position:
                 continue
 
             if RSI <= 50 and self.cash - (p * b_amount) >= 0:
+                rs.orders.order_buy_limit(
+                    self.ticker,
+                    int(b_amount),
+                    p,
+                    timeInForce = 'ioc')
+
                 self.cash = self.cash - (p * b_amount)
                 self.amount = self.amount + b_amount
                 self.value = self.cash + (p * self.amount)
@@ -67,6 +64,12 @@ class Stock_Position:
                 continue
 
             elif RSI > 50 and self.amount> 0:
+                rs.orders.order_sell_limit(
+                    self.ticker,
+                    int(s_amount),
+                    p,
+                    timeInForce = 'ioc')
+
                 if s_amount > self.amount:
                     self.cash = self.cash + (p * self.amount)
                     self.amount = 0

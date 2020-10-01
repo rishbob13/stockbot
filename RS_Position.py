@@ -41,7 +41,7 @@ class RS_Position:
 
         while (time.time() < t_end):
 
-            RSI = RSI_short_term(self.ticker, rsi_per)
+            RSI = RSI_short_term(self.ticker, rsi_per, 2.5, 1)
             p = get_live_price(self.ticker)
             mult = (self.value//16)//p
             if mult < 1: mult = 1

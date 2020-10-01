@@ -12,7 +12,7 @@ Functions useful for evaluating stock momentum to be used in the bots
 
 
 
-def RSI_short_term(ticker, secs):
+def RSI_short_term(ticker, secs, exp, interval):
     """
     RSI calculator for short term (intraday) momentum
     """
@@ -29,9 +29,9 @@ def RSI_short_term(ticker, secs):
             elif p < prev:
                 loss.append(prev - p)
         prev = p
-        time.sleep(1)
+        time.sleep(interval)
 
-    rs = (np.sum(gain)/len(arr))**2.5/(np.sum(loss)/len(arr))**2.5
+    rs = (np.sum(gain)/len(arr))**exp/(np.sum(loss)/len(arr))**exp
     #seems to be well calibrated for periods of 60 secs, all over the place
     #for smaller periods like 14
     rsi = 100 - 100/(1 + rs)

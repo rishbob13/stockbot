@@ -40,6 +40,20 @@ class Portfolio:
         return print(str(self))
 
 
+    def add_money(self, amount):
+        for i in self.positions:
+            i.cash = i.cash + amount/len(self.positions)
+        return self.check_positions()
+
+
+    def add_position(self, ticker, value):
+        if RS == True:
+            self.positions.append(RS_Position(ticker, value))
+        else:
+            self.positions.append(Stock_Position(ticker, value))
+        return self.check_positions()
+
+
     def simul_run(self, secs, RSI_per):
         threads = []
 
